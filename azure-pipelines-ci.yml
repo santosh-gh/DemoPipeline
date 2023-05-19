@@ -14,7 +14,7 @@ jobs:
     inputs:
       packageType: 'sdk'
       version: '6.x'
-      
+
   - task: DotNetCoreCLI@2
     displayName: 'DotNet Restore Before Build'
     inputs:
@@ -31,7 +31,7 @@ jobs:
 - job: testJob
   displayName: Test Job
   dependsOn: buildJob
-  condition: succeeded('build_job')
+  #condition: succeeded('build_job')
   steps:
   - task: UseDotNet@2
     displayName: Use .Net 6.x
