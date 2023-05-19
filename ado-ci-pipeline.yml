@@ -4,11 +4,16 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  BuildConfiguration: "Release"
+
 jobs:
 
 - job: buildJob
   displayName: Build Job
+
   steps:
+
   - task: UseDotNet@2
     displayName: Use .Net 6.x
     inputs:
@@ -22,7 +27,7 @@ jobs:
       projects: '**/DemoAPI/*.csproj'
 
   - task: DotNetCoreCLI@2
-    displayName: 'DotNet Build'
+    displayName: "Build with $(buildConfiguration) configuration"
     inputs:
       command: 'build'
       arguments: '--no-restore'
