@@ -1,6 +1,7 @@
 # trigger:
 # - master
 # PR
+# Test
 pr:
 - master
 - feature
