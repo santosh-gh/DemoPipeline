@@ -9,7 +9,7 @@ variables:
 
 jobs:
 
-- job: buildJob
+- job: BuildJob
   displayName: Build Job
 
   steps:
@@ -33,9 +33,9 @@ jobs:
       arguments: '--no-restore'
       projects: '**/DemoAPI/*.csproj'
 
-- job: testJob
+- job: TestJob
   displayName: Test Job
-  dependsOn: buildJob
+  dependsOn: BuildJob
   #condition: succeeded('build_job')
   steps:
   - task: UseDotNet@2
@@ -45,13 +45,13 @@ jobs:
       version: '6.x'
 
   - task: DotNetCoreCLI@2
-    displayName: 'DotNet Restore Before Test'
+    displayName: 'DotNet Restore Before Unit Test'
     inputs:
       command: 'restore'
       projects: '**/DemoAPI.Test/*.csproj'
 
   - task: DotNetCoreCLI@2
-    displayName: 'DotNet Test'
+    displayName: 'Unit Test'
     inputs:
       command: 'test'
       arguments: '--no-restore'
