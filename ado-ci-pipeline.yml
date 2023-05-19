@@ -13,10 +13,10 @@ variables:
   BuildConfiguration: "Release"
 
 stages:
-- stage: Pull-Request
+- stage: PullRequest
   displayName: Pull Request(CI)
   jobs:
-  - job: Build-Job
+  - job: BuildJob
     displayName: Build Job
 
     steps:
@@ -39,9 +39,9 @@ stages:
         arguments: '--no-restore'
         projects: '**/DemoAPI/*.csproj'
 
-  - job: Test-Job
+  - job: TestJob
     displayName: Test Job
-    dependsOn: Build-Job
+    dependsOn: BuildJob
     #condition: succeeded('build_job')
     steps:
     - task: UseDotNet@2
@@ -64,10 +64,10 @@ stages:
         projects: '**/DemoAPI.Test/*.csproj'
         publishTestResults: true
 
-- stage: Code-Merge
+- stage: CodeMerge
   displayName: Code Merge(CI)
   jobs:
-  - job: Build-Job
+  - job: BuildJob
     displayName: Build Job
 
     steps:
@@ -90,9 +90,9 @@ stages:
         arguments: '--no-restore'
         projects: '**/DemoAPI/*.csproj'
 
-  - job: Test-Job
+  - job: TestJob
     displayName: Test Job
-    dependsOn: Build-Job
+    dependsOn: BuildJob
     #condition: succeeded('build_job')
     steps:
     - task: UseDotNet@2
