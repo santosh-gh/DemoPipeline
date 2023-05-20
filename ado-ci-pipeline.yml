@@ -11,7 +11,6 @@ pr:
     include:
     - master
     - feature*
-
 # pr:
 # - master
 # - feature
@@ -36,103 +35,103 @@ stages:
         packageType: 'sdk'
         version: '6.x'
 
-    - task: DotNetCoreCLI@2
-      displayName: 'DotNet Restore Before Build'
-      inputs:
-        command: 'restore'
-        projects: '**/DemoAPI/*.csproj'
+#     - task: DotNetCoreCLI@2
+#       displayName: 'DotNet Restore Before Build'
+#       inputs:
+#         command: 'restore'
+#         projects: '**/DemoAPI/*.csproj'
 
-    - task: DotNetCoreCLI@2
-      displayName: "Build with $(buildConfiguration) configuration"
-      inputs:
-        command: 'build'
-        arguments: '--no-restore'
-        projects: '**/DemoAPI/*.csproj'
+#     - task: DotNetCoreCLI@2
+#       displayName: "Build with $(buildConfiguration) configuration"
+#       inputs:
+#         command: 'build'
+#         arguments: '--no-restore'
+#         projects: '**/DemoAPI/*.csproj'
 
-  - job: TestJob
-    displayName: Test Job
-    dependsOn: BuildJob
-    #condition: succeeded('build_job')
-    steps:
-    - task: UseDotNet@2
-      displayName: Use .Net 6.x
-      inputs:
-        packageType: 'sdk'
-        version: '6.x'
+#   - job: TestJob
+#     displayName: Test Job
+#     dependsOn: BuildJob
+#     #condition: succeeded('build_job')
+#     steps:
+#     - task: UseDotNet@2
+#       displayName: Use .Net 6.x
+#       inputs:
+#         packageType: 'sdk'
+#         version: '6.x'
 
-    - task: DotNetCoreCLI@2
-      displayName: 'DotNet Restore Before Unit Test'
-      inputs:
-        command: 'restore'
-        projects: '**/DemoAPI.Test/*.csproj'
+#     - task: DotNetCoreCLI@2
+#       displayName: 'DotNet Restore Before Unit Test'
+#       inputs:
+#         command: 'restore'
+#         projects: '**/DemoAPI.Test/*.csproj'
 
-    - task: DotNetCoreCLI@2
-      displayName: 'Unit Test'
-      inputs:
-        command: 'test'
-        arguments: '--no-restore'
-        projects: '**/DemoAPI.Test/*.csproj'
-        publishTestResults: true
+#     - task: DotNetCoreCLI@2
+#       displayName: 'Unit Test'
+#       inputs:
+#         command: 'test'
+#         arguments: '--no-restore'
+#         projects: '**/DemoAPI.Test/*.csproj'
+#         publishTestResults: true
 
-- stage: CI_CodeMerge
-  displayName: Code Merge(CI)
-  jobs:
-  - job: BuildJob
-    displayName: Build Job
+# - stage: CI_CodeMerge
+#   displayName: Code Merge(CI)
+#   jobs:
+#   - job: BuildJob
+#     displayName: Build Job
 
-    steps:
-    - task: UseDotNet@2
-      displayName: Use .Net 6.x
-      inputs:
-        packageType: 'sdk'
-        version: '6.x'
+#     steps:
+#     - task: UseDotNet@2
+#       displayName: Use .Net 6.x
+#       inputs:
+#         packageType: 'sdk'
+#         version: '6.x'
 
-    - task: DotNetCoreCLI@2
-      displayName: 'DotNet Restore Before Build'
-      inputs:
-        command: 'restore'
-        projects: '**/DemoAPI/*.csproj'
+#     - task: DotNetCoreCLI@2
+#       displayName: 'DotNet Restore Before Build'
+#       inputs:
+#         command: 'restore'
+#         projects: '**/DemoAPI/*.csproj'
 
-    - task: DotNetCoreCLI@2
-      displayName: "Build with $(buildConfiguration) configuration"
-      inputs:
-        command: 'build'
-        arguments: '--no-restore'
-        projects: '**/DemoAPI/*.csproj'
+#     - task: DotNetCoreCLI@2
+#       displayName: "Build with $(buildConfiguration) configuration"
+#       inputs:
+#         command: 'build'
+#         arguments: '--no-restore'
+#         projects: '**/DemoAPI/*.csproj'
 
-  - job: TestJob
-    displayName: Test Job
-    dependsOn: BuildJob
-    #condition: succeeded('build_job')
-    steps:
-    - task: UseDotNet@2
-      displayName: Use .Net 6.x
-      inputs:
-        packageType: 'sdk'
-        version: '6.x'
+#   - job: TestJob
+#     displayName: Test Job
+#     dependsOn: BuildJob
+#     #condition: succeeded('build_job')
+#     steps:
+#     - task: UseDotNet@2
+#       displayName: Use .Net 6.x
+#       inputs:
+#         packageType: 'sdk'
+#         version: '6.x'
 
-    - task: DotNetCoreCLI@2
-      displayName: 'DotNet Restore Before Unit Test'
-      inputs:
-        command: 'restore'
-        projects: '**/DemoAPI.Test/*.csproj'
+#     - task: DotNetCoreCLI@2
+#       displayName: 'DotNet Restore Before Unit Test'
+#       inputs:
+#         command: 'restore'
+#         projects: '**/DemoAPI.Test/*.csproj'
 
-    - task: DotNetCoreCLI@2
-      displayName: 'Unit Test'
-      inputs:
-        command: 'test'
-        arguments: '--no-restore'
-        projects: '**/DemoAPI.Test/*.csproj'
-        publishTestResults: true
+#     - task: DotNetCoreCLI@2
+#       displayName: 'Unit Test'
+#       inputs:
+#         command: 'test'
+#         arguments: '--no-restore'
+#         projects: '**/DemoAPI.Test/*.csproj'
+#         publishTestResults: true
 
-  - job: buildAndPushDockerImageJob
-    displayName: Build & Push Docker Image Job
-    steps:
-    - task: UseDotNet@2
-      displayName: Use .Net 6.x
-      inputs:
-        packageType: 'sdk'
-        version: '6.x'
+#   - job: buildAndPushDockerImageJob
+#     displayName: Build & Push Docker Image Job
+#     steps:
+#     - task: UseDotNet@2
+#       displayName: Use .Net 6.x
+#       inputs:
+#         packageType: 'sdk'
+#         version: '6.x'
 
     # - task: Docker@2
     #   displayName: Build & Push DemoAPI Image to ACR
