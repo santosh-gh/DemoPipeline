@@ -9,7 +9,6 @@ trigger:
 pr:
   branches:
     include:
-    - master
     - feature*
 # pr:
 # - master
