@@ -1,9 +1,20 @@
 # trigger:
 # - master
 # PR
+trigger:
+  branches:
+    include:
+    - master
+
 pr:
-- master
-- feature
+  branches:
+    include:
+    - master
+    - feature*
+
+# pr:
+# - master
+# - feature
 
 pool:
   vmImage: ubuntu-latest
