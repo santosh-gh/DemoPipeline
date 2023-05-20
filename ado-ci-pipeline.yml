@@ -47,7 +47,7 @@ stages:
     displayName: Test Job
     dependsOn: BuildJob
     #condition: succeeded('build_job')
-    condition: and(succeeded(), 'PullRequest'))  
+    condition: and(succeeded(), ne('PullRequest'))  
     steps:
     - task: UseDotNet@2
       displayName: Use .Net 6.x
