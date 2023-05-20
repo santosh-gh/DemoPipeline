@@ -14,7 +14,7 @@ namespace DemoAPI.Test
         [Theory]
         [InlineAutoData(2, 2, 4)]
         [InlineAutoData(2, 1, 3)]
-        [InlineAutoData(5, 7, 10)]
+        [InlineAutoData(5, 7, 12)]
         public void Addition_Test(int x, int y, int expectedResult)
         {
             var result = _classFixture.Sut.Add(x, y);
