@@ -7,3 +7,8 @@ Restore dotnet packages
 Build dotnet project
 Publish dotnet project
 Publish artifact
+
+
+
+git branch
+git checkout -b feature
