@@ -1,8 +1,8 @@
 # trigger:
 # - master
 
-pr:
-- feature
+# pr:
+# - feature
 
 pool:
   vmImage: ubuntu-latest
