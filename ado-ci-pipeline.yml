@@ -18,60 +18,59 @@ variables:
   BuildConfiguration: "Release"
 
 stages:
-- stage: CI_PullRequest
-  displayName: Pull Request(CI)
-  jobs:
-  - job: BuildJob
-    displayName: Build Job
+# - stage: CI_PullRequest
+#   displayName: Pull Request(CI)
+#   jobs:
+#   - job: BuildJob
+#     displayName: Build Job
 
-    steps:
-    - task: UseDotNet@2
-      displayName: Use .Net 6.x
-      inputs:
-        packageType: 'sdk'
-        version: '6.x'
+#     steps:
+#     - task: UseDotNet@2
+#       displayName: Use .Net 6.x
+#       inputs:
+#         packageType: 'sdk'
+#         version: '6.x'
 
-    - task: DotNetCoreCLI@2
-      displayName: 'DotNet Restore Before Build'
-      inputs:
-        command: 'restore'
-        projects: '**/DemoAPI/*.csproj'
+#     - task: DotNetCoreCLI@2
+#       displayName: 'DotNet Restore Before Build'
+#       inputs:
+#         command: 'restore'
+#         projects: '**/DemoAPI/*.csproj'
 
-    - task: DotNetCoreCLI@2
-      displayName: "Build with $(buildConfiguration) configuration"
-      inputs:
-        command: 'build'
-        arguments: '--no-restore'
-        projects: '**/DemoAPI/*.csproj'
+#     - task: DotNetCoreCLI@2
+#       displayName: "Build with $(buildConfiguration) configuration"
+#       inputs:
+#         command: 'build'
+#         arguments: '--no-restore'
+#         projects: '**/DemoAPI/*.csproj'
 
-  - job: TestJob
-    displayName: Test Job
-    dependsOn: BuildJob
-    #condition: succeeded('build_job')
-    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))  
-    steps:
-    - task: UseDotNet@2
-      displayName: Use .Net 6.x
-      inputs:
-        packageType: 'sdk'
-        version: '6.x'
+#   - job: TestJob
+#     displayName: Test Job
+#     dependsOn: BuildJob
+#     #condition: succeeded('build_job')    
+#     steps:
+#     - task: UseDotNet@2
+#       displayName: Use .Net 6.x
+#       inputs:
+#         packageType: 'sdk'
+#         version: '6.x'
 
-    - task: DotNetCoreCLI@2
-      displayName: 'DotNet Restore Before Unit Test'
-      inputs:
-        command: 'restore'
-        projects: '**/DemoAPI.Test/*.csproj'
+#     - task: DotNetCoreCLI@2
+#       displayName: 'DotNet Restore Before Unit Test'
+#       inputs:
+#         command: 'restore'
+#         projects: '**/DemoAPI.Test/*.csproj'
 
-    - task: DotNetCoreCLI@2
-      displayName: 'Unit Test'
-      inputs:
-        command: 'test'
-        arguments: '--no-restore'
-        projects: '**/DemoAPI.Test/*.csproj'
-        publishTestResults: true
+#     - task: DotNetCoreCLI@2
+#       displayName: 'Unit Test'
+#       inputs:
+#         command: 'test'
+#         arguments: '--no-restore'
+#         projects: '**/DemoAPI.Test/*.csproj'
+#         publishTestResults: true
 
-- stage: CI_CodeMerge
-  displayName: Code Merge(CI)
+- stage: CI_Build_Stage
+  displayName: CI Build Stage
   jobs:
   - job: BuildJob
     displayName: Build Job
@@ -123,6 +122,7 @@ stages:
 
   - job: buildAndPushDockerImageJob
     displayName: Build & Push Docker Image Job
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest')) 
     steps:
     - task: UseDotNet@2
       displayName: Use .Net 6.x
