@@ -2,7 +2,7 @@
 # - master
 
 pr:
-- master
+- feature
 
 pool:
   vmImage: ubuntu-latest
