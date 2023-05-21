@@ -81,17 +81,13 @@ stages:
     #   displayName: Login to ACR
     #   inputs:
     #     command: login
-    #     containerRegistry: dockerRegistryServiceConnection1
-    - task: Docker@2
-      displayName: Login to Docker Hub
-      inputs:
-        command: login
-        containerRegistry: $(Docker-Hub-Repository-Name)
+    #     containerRegistry: dockerRegistryServiceConnection1   
     - task: Docker@2
       displayName: Build and Push
       inputs:
         command: buildAndPush
-        repository: 'demoapi' #$(Docker-Hub-Repository-Name) # username/contosoRepository for DockerHub
+        containerRegistry: $(dockerRegistryServiceConnection)
+        repository: $(Docker-Hub-Repository-Name) # username/contosoRepository for DockerHub
         Dockerfile: '**/DemoAPI/Dockerfile'
         buildContext: $(Build.Repository.LocalPath)
         tags: $(Build.BuildId)
