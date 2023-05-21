@@ -12,8 +12,9 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
- - group : domo-api-variables
- - BuildConfiguration: "Release"
+ - group: domo-api-variables
+ - name: BuildConfiguration
+   value: "Release"
 
 stages:
 - stage: CI_Build_Stage
