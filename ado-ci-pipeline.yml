@@ -29,7 +29,15 @@ stages:
       inputs:
         packageType: 'sdk'
         version: '6.x'
-    
+
+    - task: SonarCloudPrepare@1
+      inputs:
+        SonarCloud: 'sonar-cloud-svc-connection'
+        organization: 'santoshmohapatra25'
+        scannerMode: 'MSBuild'
+        projectKey: 'SANTOSHMOHAPATRA25_WebApp'
+        projectName: 'WebApp'
+        
     - task: DotNetCoreCLI@2
       displayName: 'DotNet Restore Before Build'
       inputs:
@@ -42,7 +50,14 @@ stages:
         command: 'build'
         arguments: '--no-restore'
         projects: '**/DemoAPI/*.csproj'
-
+    - task: SonarCloudPublish@1
+      displayName: 'Publish Quality Gate Result on SonarCloud'
+      enabled: true
+      inputs:
+        pollingTimeoutSec: '300'
+    - task: SonarCloudAnalyze@1
+      displayName: 'Run Code Analysis on SonarCloud'
+      enabled: true
   - job: TestJob
     displayName: Test Job
     dependsOn: BuildJob
