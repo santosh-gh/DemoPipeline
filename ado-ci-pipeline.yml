@@ -85,11 +85,29 @@ stages:
         containerRegistry: $(Docker-Hub-Service-Connection)
 
     - task: Docker@2
-      displayName: Build and Push
+      displayName: Docker Build 
       inputs:
-        command: buildAndPush
+        command: build
         containerRegistry: $(Docker-Hub-Service-Connection)
         repository: $(Docker-Hub-Repository-Name) # username/contosoRepository for DockerHub
         Dockerfile: '**/DemoAPI/Dockerfile'
         buildContext: $(Build.Repository.LocalPath)
         tags: $(Build.BuildId)
+
+    - task: Docker@2
+      displayName: Docker Push
+      inputs:
+        command: push
+        containerRegistry: $(Docker-Hub-Service-Connection)
+        repository: $(Docker-Hub-Repository-Name) # username/contosoRepository for DockerHub
+        tags: $(Build.BuildId)
+
+    # - task: Docker@2
+    #   displayName: Build and Push
+    #   inputs:
+    #     command: buildAndPush
+    #     containerRegistry: $(Docker-Hub-Service-Connection)
+    #     repository: $(Docker-Hub-Repository-Name) # username/contosoRepository for DockerHub
+    #     Dockerfile: '**/DemoAPI/Dockerfile'
+    #     buildContext: $(Build.Repository.LocalPath)
+    #     tags: $(Build.BuildId)
