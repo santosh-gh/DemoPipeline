@@ -29,7 +29,7 @@ stages:
       inputs:
         packageType: 'sdk'
         version: '6.x'
-
+    
     - task: DotNetCoreCLI@2
       displayName: 'DotNet Restore Before Build'
       inputs:
@@ -77,12 +77,13 @@ stages:
       inputs:
         packageType: 'sdk'
         version: '6.x'    
+
     - task: Docker@2
       displayName: Login to ACR
       inputs:
         command: login
         containerRegistry: $(Docker-Hub-Service-Connection)
-        
+
     - task: Docker@2
       displayName: Build and Push
       inputs:
@@ -92,13 +93,3 @@ stages:
         Dockerfile: '**/DemoAPI/Dockerfile'
         buildContext: $(Build.Repository.LocalPath)
         tags: $(Build.BuildId)
-
-    # - task: Docker@2
-    #   displayName: Build & Push DemoAPI Image to ACR
-    #   inputs:
-    #     containerRegistry: AcrServiceConnectionDemoAPI
-    #     repository: 'Demo-api'
-    #     command: buildAndPush
-    #     Dockerfile: '**/DemoAPI/Dockerfile'
-    #     buildContext: $(Build.Repository.LocalPath)
-    #     tags: $(Build.BuildId)
