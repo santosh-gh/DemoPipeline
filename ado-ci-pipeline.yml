@@ -58,7 +58,14 @@ stages:
     - task: SonarCloudAnalyze@1
       displayName: 'Run Code Analysis on SonarCloud'
       enabled: true
-  - job: TestJob
+
+    - task: WhiteSource@21
+      enabled: true
+      inputs:
+        cwd: '$(System.DefaultWorkingDirectory)'
+        projectName: 'WebApp'
+    
+  - job: TestJob 
     displayName: Test Job
     dependsOn: BuildJob
     #condition: succeeded('build_job')
