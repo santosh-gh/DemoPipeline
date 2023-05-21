@@ -48,7 +48,14 @@ stages:
         command: 'build'
         arguments: '--no-restore'
         projects: '**/DemoAPI/*.csproj'
-
+    - task: SonarCloudPublish@1
+      displayName: 'Publish Quality Gate Result on SonarCloud'
+      enabled: true
+      inputs:
+        pollingTimeoutSec: '300'
+    - task: SonarCloudAnalyze@1
+      displayName: 'Run Code Analysis on SonarCloud'
+      enabled: true
   - job: TestJob
     displayName: Test Job
     dependsOn: BuildJob
