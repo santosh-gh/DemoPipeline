@@ -14,3 +14,11 @@ Publish artifact
 
 git branch
 git checkout -b feature
+
+
+Topics
+
+- Configuring SonarCloud in a Pipeline
+
+pat-sonar-cloud token
+poec3ibukf73vqdvp7fwqormmafqre3lvbb6hwkpwklzrslac2dq
