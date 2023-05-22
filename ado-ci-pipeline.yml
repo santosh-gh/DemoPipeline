@@ -13,9 +13,12 @@ pool:
 
 variables:
  - group: domo-api-variables
-   BuildConfiguration: "Release"
-   ChartPath: "helm-deploy"
-   ApiName: "WebApi"
+ - name: BuildConfiguration
+   value: "Release"
+ - name: ChartPath
+   value: "helm-deploy"
+ - name ApiName: 
+   value: "WebApi"
 
 resources: 
   repositories:
