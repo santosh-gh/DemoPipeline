@@ -164,8 +164,8 @@ stages:
     - task: HelmDeploy@0
       displayName: 'Helm upgrade release'
       inputs:
-        connectionType: 'Azure Resource Manager'
-        #azureSubscriptionEndpoint: $(AzureResourceManagerConnection)
+        #connectionType: 'Azure Resource Manager'
+        azureSubscriptionEndpoint: $(AzureResourceManagerConnection)
         azureSubscription: $(AzureSubscription)
         azureResourceGroup: '$(K8sResourceGroup)'
         kubernetesCluster: '$(K8sCluster)'
