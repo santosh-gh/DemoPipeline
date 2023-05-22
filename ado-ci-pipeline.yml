@@ -53,30 +53,6 @@ stages:
       inputs:
         command: 'restore'
         projects: '**/DemoAPI/*.csproj'
-    - task: DotNetCoreCLI@2
-      displayName: "Build with $(buildConfiguration) configuration"
-      inputs:
-        command: 'build'
-        arguments: '--no-restore'
-        projects: '**/DemoAPI/*.csproj'
-    - task: SonarCloudPublish@1
-      displayName: 'Publish Quality Gate Result on SonarCloud'
-      enabled: true
-      inputs:
-        pollingTimeoutSec: '300'
-    - task: SonarCloudAnalyze@1
-      displayName: 'Run Code Analysis on SonarCloud'
-      enabled: true
-  - job: TestJob
-    displayName: Test Job
-    dependsOn: BuildJob
-    #condition: succeeded('build_job')
-    steps:
-    - task: UseDotNet@2
-      displayName: Use .Net 6.x
-      inputs:
-        packageType: 'sdk'
-        version: '6.x'
 
     - task: DotNetCoreCLI@2
       displayName: "Build with $(buildConfiguration) configuration"
@@ -84,11 +60,13 @@ stages:
         command: 'build'
         arguments: '--no-restore'
         projects: '**/DemoAPI/*.csproj'
+
     - task: SonarCloudPublish@1
       displayName: 'Publish Quality Gate Result on SonarCloud'
       enabled: true
       inputs:
         pollingTimeoutSec: '300'
+
     - task: SonarCloudAnalyze@1
       displayName: 'Run Code Analysis on SonarCloud'
       enabled: true
@@ -110,7 +88,6 @@ stages:
         packageType: 'sdk'
         version: '6.x'
 
-
     - task: DotNetCoreCLI@2
       displayName: 'DotNet Restore Before Unit Test'
       inputs:
@@ -124,6 +101,7 @@ stages:
         arguments: '--no-restore'
         projects: '**/DemoAPI.Test/*.csproj'
         publishTestResults: true
+
   - job: BuildAndPushDockerImageJob
     displayName: Build & Push Docker Image Job
     condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest')) 
