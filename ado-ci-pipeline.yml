@@ -27,136 +27,136 @@ variables:
 #     name: DemoPipeline/helm-deploy
 
 stages:
-# - stage: CI_Build_Stage
-#   displayName: CI Build Stage
-#   jobs:
-#   - job: BuildJob
-#     displayName: Build Job
+- stage: CI_Build_Stage
+  displayName: CI Build Stage
+  jobs:
+  - job: BuildJob
+    displayName: Build Job
 
-#     steps:
-#     - task: UseDotNet@2
-#       displayName: Use .Net 6.x
-#       inputs:
-#         packageType: 'sdk'
-#         version: '6.x'
+    steps:
+    - task: UseDotNet@2
+      displayName: Use .Net 6.x
+      inputs:
+        packageType: 'sdk'
+        version: '6.x'
 
-#     - task: SonarCloudPrepare@1
-#       inputs:
-#         SonarCloud: 'sonar-cloud-svc-connection'
-#         organization: 'santoshmohapatra25'
-#         scannerMode: 'MSBuild'
-#         projectKey: 'SANTOSHMOHAPATRA25_WebApp'
-#         projectName: 'WebApp'
+    - task: SonarCloudPrepare@1
+      inputs:
+        SonarCloud: 'sonar-cloud-svc-connection'
+        organization: 'santoshmohapatra25'
+        scannerMode: 'MSBuild'
+        projectKey: 'SANTOSHMOHAPATRA25_WebApp'
+        projectName: 'WebApp'
         
-#     - task: DotNetCoreCLI@2
-#       displayName: 'DotNet Restore Before Build'
-#       inputs:
-#         command: 'restore'
-#         projects: '**/DemoAPI/*.csproj'
-#     - task: DotNetCoreCLI@2
-#       displayName: "Build with $(buildConfiguration) configuration"
-#       inputs:
-#         command: 'build'
-#         arguments: '--no-restore'
-#         projects: '**/DemoAPI/*.csproj'
-#     - task: SonarCloudPublish@1
-#       displayName: 'Publish Quality Gate Result on SonarCloud'
-#       enabled: true
-#       inputs:
-#         pollingTimeoutSec: '300'
-#     - task: SonarCloudAnalyze@1
-#       displayName: 'Run Code Analysis on SonarCloud'
-#       enabled: true
-#   - job: TestJob
-#     displayName: Test Job
-#     dependsOn: BuildJob
-#     #condition: succeeded('build_job')
-#     steps:
-#     - task: UseDotNet@2
-#       displayName: Use .Net 6.x
-#       inputs:
-#         packageType: 'sdk'
-#         version: '6.x'
+    - task: DotNetCoreCLI@2
+      displayName: 'DotNet Restore Before Build'
+      inputs:
+        command: 'restore'
+        projects: '**/DemoAPI/*.csproj'
+    - task: DotNetCoreCLI@2
+      displayName: "Build with $(buildConfiguration) configuration"
+      inputs:
+        command: 'build'
+        arguments: '--no-restore'
+        projects: '**/DemoAPI/*.csproj'
+    - task: SonarCloudPublish@1
+      displayName: 'Publish Quality Gate Result on SonarCloud'
+      enabled: true
+      inputs:
+        pollingTimeoutSec: '300'
+    - task: SonarCloudAnalyze@1
+      displayName: 'Run Code Analysis on SonarCloud'
+      enabled: true
+  - job: TestJob
+    displayName: Test Job
+    dependsOn: BuildJob
+    #condition: succeeded('build_job')
+    steps:
+    - task: UseDotNet@2
+      displayName: Use .Net 6.x
+      inputs:
+        packageType: 'sdk'
+        version: '6.x'
 
-#     - task: DotNetCoreCLI@2
-#       displayName: "Build with $(buildConfiguration) configuration"
-#       inputs:
-#         command: 'build'
-#         arguments: '--no-restore'
-#         projects: '**/DemoAPI/*.csproj'
-#     - task: SonarCloudPublish@1
-#       displayName: 'Publish Quality Gate Result on SonarCloud'
-#       enabled: true
-#       inputs:
-#         pollingTimeoutSec: '300'
-#     - task: SonarCloudAnalyze@1
-#       displayName: 'Run Code Analysis on SonarCloud'
-#       enabled: true
+    - task: DotNetCoreCLI@2
+      displayName: "Build with $(buildConfiguration) configuration"
+      inputs:
+        command: 'build'
+        arguments: '--no-restore'
+        projects: '**/DemoAPI/*.csproj'
+    - task: SonarCloudPublish@1
+      displayName: 'Publish Quality Gate Result on SonarCloud'
+      enabled: true
+      inputs:
+        pollingTimeoutSec: '300'
+    - task: SonarCloudAnalyze@1
+      displayName: 'Run Code Analysis on SonarCloud'
+      enabled: true
 
-#     - task: WhiteSource@21
-#       enabled: true
-#       inputs:
-#         cwd: '$(System.DefaultWorkingDirectory)'
-#         projectName: 'WebApp'
+    - task: WhiteSource@21
+      enabled: true
+      inputs:
+        cwd: '$(System.DefaultWorkingDirectory)'
+        projectName: 'WebApp'
     
-#   - job: TestJob 
-#     displayName: Test Job
-#     dependsOn: BuildJob
-#     #condition: succeeded('build_job')
-#     steps:
-#     - task: UseDotNet@2
-#       displayName: Use .Net 6.x
-#       inputs:
-#         packageType: 'sdk'
-#         version: '6.x'
+  - job: TestJob 
+    displayName: Test Job
+    dependsOn: BuildJob
+    #condition: succeeded('build_job')
+    steps:
+    - task: UseDotNet@2
+      displayName: Use .Net 6.x
+      inputs:
+        packageType: 'sdk'
+        version: '6.x'
 
 
-#     - task: DotNetCoreCLI@2
-#       displayName: 'DotNet Restore Before Unit Test'
-#       inputs:
-#         command: 'restore'
-#         projects: '**/DemoAPI.Test/*.csproj'
+    - task: DotNetCoreCLI@2
+      displayName: 'DotNet Restore Before Unit Test'
+      inputs:
+        command: 'restore'
+        projects: '**/DemoAPI.Test/*.csproj'
 
-#     - task: DotNetCoreCLI@2
-#       displayName: 'Unit Test'
-#       inputs:
-#         command: 'test'
-#         arguments: '--no-restore'
-#         projects: '**/DemoAPI.Test/*.csproj'
-#         publishTestResults: true
-#   - job: BuildAndPushDockerImageJob
-#     displayName: Build & Push Docker Image Job
-#     condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest')) 
-#     steps:
-#     - task: UseDotNet@2
-#       displayName: Use .Net 6.x
-#       inputs:
-#         packageType: 'sdk'
-#         version: '6.x'    
+    - task: DotNetCoreCLI@2
+      displayName: 'Unit Test'
+      inputs:
+        command: 'test'
+        arguments: '--no-restore'
+        projects: '**/DemoAPI.Test/*.csproj'
+        publishTestResults: true
+  - job: BuildAndPushDockerImageJob
+    displayName: Build & Push Docker Image Job
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest')) 
+    steps:
+    - task: UseDotNet@2
+      displayName: Use .Net 6.x
+      inputs:
+        packageType: 'sdk'
+        version: '6.x'    
 
-#     - task: Docker@2
-#       displayName: Login to Docker-Hub
-#       inputs:
-#         command: login
-#         containerRegistry: $(Docker-Hub-Service-Connection)
+    - task: Docker@2
+      displayName: Login to Docker-Hub
+      inputs:
+        command: login
+        containerRegistry: $(Docker-Hub-Service-Connection)
 
-#     - task: Docker@2
-#       displayName: Docker Build 
-#       inputs:
-#         command: build
-#         containerRegistry: $(Docker-Hub-Service-Connection)
-#         repository: $(Docker-Hub-Repository-Name) # username/Repository for DockerHub
-#         Dockerfile: '**/DemoAPI/Dockerfile'
-#         buildContext: $(Build.Repository.LocalPath)
-#         tags: $(Build.BuildId)
+    - task: Docker@2
+      displayName: Docker Build 
+      inputs:
+        command: build
+        containerRegistry: $(Docker-Hub-Service-Connection)
+        repository: $(Docker-Hub-Repository-Name) # username/Repository for DockerHub
+        Dockerfile: '**/DemoAPI/Dockerfile'
+        buildContext: $(Build.Repository.LocalPath)
+        tags: $(Build.BuildId)
 
-#     - task: Docker@2
-#       displayName: Docker Push
-#       inputs:
-#         command: push
-#         containerRegistry: $(Docker-Hub-Service-Connection)
-#         repository: $(Docker-Hub-Repository-Name) # username/Repository for DockerHub
-#         tags: $(Build.BuildId)
+    - task: Docker@2
+      displayName: Docker Push
+      inputs:
+        command: push
+        containerRegistry: $(Docker-Hub-Service-Connection)
+        repository: $(Docker-Hub-Repository-Name) # username/Repository for DockerHub
+        tags: $(Build.BuildId)
 
 - stage: CD_Deploy_Stage
   displayName: CD Deploy stage
@@ -170,21 +170,10 @@ stages:
       inputs:
         helmVersion: $(HelmVersion)
         checkLatestHelmVersion: false
-        installKubectl: true      
-      
-    # - task: HelmDeploy@0
-    #   displayName: 'helm package'
-    #   inputs:
-    #     azureSubscriptionEndpoint: $(AzureSubscription)
-    #     azureResourceGroup: $(K8sResourceGroup)
-    #     kubernetesCluster: $(K8sCluster)
-    #     command: 'package'
-    #     chartPath: $(Build.SourceDirectory)/$(chartPath)
-    #     chartVersion: $(Build.BuildNumber)
-    #     save: false
-    #     namespace: '$(K8sNamespace)'      
+        installKubectl: true     
+
     - checkout: self
-    #- checkout: github.com/santosh-gh/DemoPipeline/tree/master/helm-deploy
+
     - script: |
               ls $(System.DefaultWorkingDirectory)
     - task: HelmDeploy@0
