@@ -17,7 +17,7 @@ variables:
    value: "Release"
  - name: ChartPath
    value: "helm-deploy"
- - name ApiName: 
+ - name: ApiName
    value: "WebApi"
 
 resources: 
