@@ -185,7 +185,8 @@ stages:
     #     namespace: '$(K8sNamespace)'      
     - checkout: self
     #- checkout: github.com/santosh-gh/DemoPipeline/tree/master/helm-deploy
-
+    - script: |
+              ls $(System.DefaultWorkingDirectory)
     - task: HelmDeploy@0
       displayName: 'Helm upgrade release'
       inputs:
@@ -198,6 +199,6 @@ stages:
         namespace: '$(K8sNamespace)'
         command: 'upgrade'
         chartType: 'FilePath'
-        chartPath: '$(Build.SourceDirectory)/$(chartPath)'
+        chartPath: '$(System.DefaultWorkingDirectory)/$(chartPath)'
         releaseName: '$(K8sNamespace)'
         arguments: '--create-namespace'
