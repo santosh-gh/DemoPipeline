@@ -121,7 +121,7 @@ stages:
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
   jobs:
   - job: HelmDeploy
-    DisplayMane: Helm Deploy
+    displayName: Helm Deploy
     steps: 
     - task: HelmInstaller@0
       displayName: 'Install Helm $(HelmVersion)'
