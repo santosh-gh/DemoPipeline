@@ -173,6 +173,6 @@ stages:
         namespace: '$(K8sNamespace)'
         command: 'upgrade'
         chartType: 'FilePath'
-        chartPath: '$(Build.SourceDirectory)/$(chartPath)'
+        chartPath: 'demopipeline/helm-deploy'
         releaseName: '$(K8sNamespace)'
         arguments: '--create-namespace'
