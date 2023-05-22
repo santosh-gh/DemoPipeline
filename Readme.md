@@ -4,6 +4,11 @@ https://www.programmingwithwolfgang.com/microservice-series-from-zero-to-hero
 # Creating a dynamic Pull Request environment with Azure Pipelines
 https://samlearnsazure.blog/2020/02/27/creating-a-dynamic-pull-request-environment-with-azure-pipelines/
 
+# Helm 3 - CI/CD with Azure DevOps using Azure Container Registry (ACR) and Azure Kubernetes Service (AKS)
+https://www.visualstudiogeeks.com/devops/helm/deploying-helm-chart-with-azdo
+
+https://kshyam.medium.com/deploy-asp-net-core-application-on-aks-with-helm-through-azure-devops-b34a31241e97
+
 We can modify the content of the ado-ci-pipeline.yml file to include following steps.
 Restore dotnet packages
 Build dotnet project
@@ -17,7 +22,12 @@ git checkout -b feature
 
 
 Topics
-
+Create Azure container registry.
+Create AKS cluster.
+Dockerfile
+Helm Chart
+Create build pipeline (Docker build and push)
+Create release pipeline (deploy app to ak
 - Configuring SonarCloud in a Pipeline
 
 pat-sonar-cloud token
