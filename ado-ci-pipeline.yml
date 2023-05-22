@@ -13,8 +13,15 @@ pool:
 
 variables:
  - group: domo-api-variables
- - name: BuildConfiguration
-   value: "Release"
+   BuildConfiguration: "Release"
+   ChartPath: "helm-deploy"
+   ApiName: "WebApi"
+
+resources: 
+  repositories:
+  - repository: DeployTemplates
+    type: git
+    name: DemoPipeline/helm-deploy
 
 stages:
 - stage: CI_Build_Stage
@@ -141,25 +148,28 @@ stages:
     #   displayName: 'helm package'
     #   inputs:
     #     azureSubscriptionEndpoint: $(AzureSubscription)
-    #     azureResourceGroup: $(ClusterResourceGroup)
-    #     kubernetesCluster: $(KubernetesCluster)
+    #     azureResourceGroup: $(K8sResourceGroup)
+    #     kubernetesCluster: $(K8sCluster)
     #     command: 'package'
-    #     chartPath: $(ChartPath)
+    #     chartPath: $(Build.SourceDirectory)/$(chartPath)
     #     chartVersion: $(Build.BuildNumber)
     #     save: false
     #     namespace: '$(K8sNamespace)'      
-    
-    # - task: HelmDeploy@0
-    #   displayName: 'Helm upgrade release'
-    #   inputs:
-    #     connectionType: 'Azure Resource Manager'
-    #     azureSubscription: $(AzureSubscription)
-    #     azureResourceGroup: '$(ClusterResourceGroup)'
-    #     kubernetesCluster: '$(KubernetesCluster)'
-    #     useClusterAdmin: true
-    #     namespace: '$(K8sNamespace)'
-    #     command: 'upgrade'
-    #     chartType: 'FilePath'
-    #     chartPath: '$(ChartPackage)'
-    #     releaseName: '$(ApiName)-$(K8sNamespace)'
-    #     arguments: '--create-namespace'
+    - checkout: self
+    - checkout: github.com/santosh-gh/DemoPipeline/tree/master/helm-deploy
+
+    - task: HelmDeploy@0
+      displayName: 'Helm upgrade release'
+      inputs:
+        connectionType: 'Azure Resource Manager'
+        #azureSubscriptionEndpoint: $(AzureResourceManagerConnection)
+        azureSubscription: $(AzureSubscription)
+        azureResourceGroup: '$(K8sResourceGroup)'
+        kubernetesCluster: '$(K8sCluster)'
+        useClusterAdmin: true
+        namespace: '$(K8sNamespace)'
+        command: 'upgrade'
+        chartType: 'FilePath'
+        chartPath: '$(Build.SourceDirectory)/$(chartPath)'
+        releaseName: '$(ApiName)-$(K8sNamespace)'
+        arguments: '--create-namespace'
