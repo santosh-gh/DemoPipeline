@@ -32,3 +32,12 @@ Create release pipeline (deploy app to ak
 
 pat-sonar-cloud token
 poec3ibukf73vqdvp7fwqormmafqre3lvbb6hwkpwklzrslac2dq
+
+
+# AKS
+az group create --name myResourceGroup --location southindia
+
+az aks create -g myResourceGroup -n myAKSCluster --enable-managed-identity --node-count 1 --generate-ssh-keys
+
+az aks get-credentials --resource-group myResourceGroup --name myAKSCluster
+
