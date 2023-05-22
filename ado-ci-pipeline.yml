@@ -154,6 +154,7 @@ stages:
 
     - script: |
               ls $(System.DefaultWorkingDirectory)
+              
     - task: HelmDeploy@0
       displayName: 'Helm upgrade release'
       inputs:

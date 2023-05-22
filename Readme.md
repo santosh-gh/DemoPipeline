@@ -42,35 +42,4 @@ az aks create -g aks-rg -n myAKSCluster --enable-managed-identity --node-count 1
 az aks get-credentials --resource-group aks-rg --name myAKSCluster
 
 
-Application (client) ID
-:
-82a3794b-7762-4f44-af35-5e08bd75b6f8
-Object ID
-:
-11670ca7-4df0-42ec-831d-bfbda6ccf007
-Directory (tenant) ID
-:
-ec3ded2c-750b-415f-b382-96464321f3cf
-
-
-secret value - QRY8Q~p~Z6xejiSxpn3SpdHFtszIfWwi4r-~Qa_B
-secret id - 106abe20-7d2d-4d55-840c-619086f71fe7
-
-az ad sp create-for-rbac  --role admin --scopes /subscriptions/b798c28b-e334-4ecf-b338-ec314ced3616
-
 az ad sp create-for-rbac --name myServicePrincipalName --role owner --scopes /subscriptions/b798c28b-e334-4ecf-b338-ec314ced3616/resourceGroups/aks-rg
-
-
-{
-  "appId": "781b9b5b-06ed-4737-b392-63dec44f7ae8",
-  "displayName": "azure-cli-2023-05-22-12-29-14",
-  "password": "DKu8Q~-e.ygyp~o3C_vy2hFGQhCmhrKVzLEYedco",
-  "tenant": "ec3ded2c-750b-415f-b382-96464321f3cf"
-}
-
-{
-  "appId": "8a3e03b5-235f-43e8-8a46-60aaa1bde43a",
-  "displayName": "myServicePrincipalName",
-  "password": "~uq8Q~vGpq2Mth2aUkgDmoy3fSWnA_0P02_Seapj",
-  "tenant": "ec3ded2c-750b-415f-b382-96464321f3cf"
-}
