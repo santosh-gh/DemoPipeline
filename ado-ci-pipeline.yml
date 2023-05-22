@@ -152,7 +152,7 @@ stages:
     #     save: false
     #     namespace: '$(K8sNamespace)'      
     - checkout: self
-    - checkout: github.com/santosh-gh/DemoPipeline/tree/master/helm-deploy
+    #- checkout: github.com/santosh-gh/DemoPipeline/tree/master/helm-deploy
 
     - task: HelmDeploy@0
       displayName: 'Helm upgrade release'
