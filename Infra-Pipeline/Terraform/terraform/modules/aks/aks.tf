@@ -36,14 +36,14 @@ resource "azurerm_kubernetes_cluster" "k8s" {
     type = "SystemAssigned"
   }
 
-  addon_profile {
-    oms_agent {
-      enabled                    = var.addons.oms_agent
-      log_analytics_workspace_id = var.log_analytics_workspace_id
-    }
-    azure_policy {
-      enabled = var.addons.azure_policy
-    }
+  # addon_profile {
+  #   oms_agent {
+  #     enabled                    = var.addons.oms_agent
+  #     log_analytics_workspace_id = var.log_analytics_workspace_id
+  #   }
+  #   azure_policy {
+  #     enabled = var.addons.azure_policy
+  #   }
 
 ingress_application_gateway {
       enabled   = var.addons.ingress_application_gateway
@@ -57,14 +57,14 @@ ingress_application_gateway {
     network_plugin    = "azure"
   }
 
-    role_based_access_control {
-    enabled = var.kubernetes_cluster_rbac_enabled
+  #   role_based_access_control {
+  #   enabled = var.kubernetes_cluster_rbac_enabled
 
-    azure_active_directory {
-      managed                = true
-      admin_group_object_ids = [var.aks_admins_group_object_id]
-    }
-  }
+  #   azure_active_directory {
+  #     managed                = true
+  #     admin_group_object_ids = [var.aks_admins_group_object_id]
+  #   }
+  # }
 
   tags = {
     Environment = var.environment
