@@ -14,7 +14,8 @@ parameters:
       - task: TerraformInstaller@0
         displayName: 'install'
         inputs:
-          terraformVersion: '${{ parameters.terraform_version }}'
+          terraformVersion: latest
+
       - task: TerraformTaskV1@0
         displayName: 'init'
         inputs:
