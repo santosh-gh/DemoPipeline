@@ -27,13 +27,13 @@ stages :
     jobs:
       - template: templates/terraform-validate.yaml
         parameters:
-          backendServiceArm: ${{ variables.backendServiceArm }}
-          backendAzureRmResourceGroupName: ${{ variables.backendAzureRmResourceGroupName }}
-          backendAzureRmStorageAccountName: ${{ variables.backendAzureRmStorageAccountName }}
-          backendAzureRmContainerName: ${{ variables.backendAzureRmContainerName }}
-          backendAzureRmKey: ${{ variables.backendAzureRmKey }}
-          environment: ${{ variables.environment }}
-          terraform_version: ${{ variables.terraform_version }}
+          backendServiceArm: $(backendServiceArm)
+          backendAzureRmResourceGroupName: $(backendAzureRmResourceGroupName)
+          backendAzureRmStorageAccountName:  $(backendAzureRmStorageAccountName)
+          backendAzureRmContainerName:  $(backendAzureRmContainerName)
+          backendAzureRmKey:  $(backendAzureRmKey)
+          environment:  $(environment)
+          terraform_version:  $(terraform_version)
 
   - stage: terraform_plan
     dependsOn: [terraform_validate]
