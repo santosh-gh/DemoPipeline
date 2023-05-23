@@ -9,6 +9,21 @@ https://www.visualstudiogeeks.com/devops/helm/deploying-helm-chart-with-azdo
 
 https://kshyam.medium.com/deploy-asp-net-core-application-on-aks-with-helm-through-azure-devops-b34a31241e97
 
+# Deploying AKS Cluster using Azure Pipeline and Terraform
+https://www.stackgenie.io/deploying-aks-cluster-using-azure-pipeline-and-terraform
+
+# Create a private Azure Kubernetes Service cluster using Terraform and Azure DevOps
+https://github.com/Azure-Samples/private-aks-cluster-terraform-devops
+
+# Azure Pipelines for Private AKS Clusters
+https://colinsalmcorner.com/azure-pipelines-for-private-aks-clusters/
+
+# Simple and fast CI/CD as a code for Kubernetes using Azure DevOps
+https://www.educative.io/answers/simple-and-fast-ci-cd-as-a-code-for-kubernetes-using-azure-devops
+
+# Authenticate with Azure Container Registry from Azure Kubernetes Service
+https://learn.microsoft.com/en-us/azure/aks/cluster-container-registry-integration?tabs=azure-cli
+
 We can modify the content of the ado-ci-pipeline.yml file to include following steps.
 Restore dotnet packages
 Build dotnet project
@@ -35,42 +50,26 @@ poec3ibukf73vqdvp7fwqormmafqre3lvbb6hwkpwklzrslac2dq
 
 
 # AKS
+
+SUBSCRIPTION="your-subscription-name"
+RSG_NAME="aks-release-demo"
+LOCATION="australiaeast"
+
+az account set --subscription $SUBSCRIPTION
+
+az group create --name $RSG_NAME --location $LOCATION
+
+az aks create --name "prod-cluster" --resource-group $RSG_NAME --location $LOCATION --node-count 1 --enable-addons monitoring --generate-ssh-keys
+
+az aks create --name "stage-cluster" --resource-group $RSG_NAME --location $LOCATION --node-count 1 --enable-addons monitoring --generate-ssh-keys
+
+az aks create --name "dev-cluster" --resource-group $RSG_NAME --location $LOCATION --node-count 1 --enable-addons monitoring --generate-ssh-keys
+
+
 az group create --name aks-rg --location southindia
 
 az aks create -g aks-rg -n myAKSCluster --enable-managed-identity --node-count 1 --generate-ssh-keys
 
 az aks get-credentials --resource-group aks-rg --name myAKSCluster
 
-
-Application (client) ID
-:
-82a3794b-7762-4f44-af35-5e08bd75b6f8
-Object ID
-:
-11670ca7-4df0-42ec-831d-bfbda6ccf007
-Directory (tenant) ID
-:
-ec3ded2c-750b-415f-b382-96464321f3cf
-
-
-secret value - QRY8Q~p~Z6xejiSxpn3SpdHFtszIfWwi4r-~Qa_B
-secret id - 106abe20-7d2d-4d55-840c-619086f71fe7
-
-az ad sp create-for-rbac  --role admin --scopes /subscriptions/b798c28b-e334-4ecf-b338-ec314ced3616
-
 az ad sp create-for-rbac --name myServicePrincipalName --role owner --scopes /subscriptions/b798c28b-e334-4ecf-b338-ec314ced3616/resourceGroups/aks-rg
-
-
-{
-  "appId": "781b9b5b-06ed-4737-b392-63dec44f7ae8",
-  "displayName": "azure-cli-2023-05-22-12-29-14",
-  "password": "DKu8Q~-e.ygyp~o3C_vy2hFGQhCmhrKVzLEYedco",
-  "tenant": "ec3ded2c-750b-415f-b382-96464321f3cf"
-}
-
-{
-  "appId": "8a3e03b5-235f-43e8-8a46-60aaa1bde43a",
-  "displayName": "myServicePrincipalName",
-  "password": "~uq8Q~vGpq2Mth2aUkgDmoy3fSWnA_0P02_Seapj",
-  "tenant": "ec3ded2c-750b-415f-b382-96464321f3cf"
-}

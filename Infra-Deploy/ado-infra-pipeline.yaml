@@ -1,0 +1,35 @@
+trigger:
+  - master
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+ - group: domo-api-variables
+ - name: BuildConfiguration
+   value: "Release"
+ - name: ChartPath
+   value: "helm-deploy"
+ - name: ApiName
+   value: "WebApi"
+
+resources:
+- repo: self
+
+stages:
+- stage: CI_Infra_Deploy
+  displayName: Infra Deploy
+  jobs:
+  - job: azcli
+    displayName: azcli Job
+    steps:
+    - task: AzureCLI@2
+      displayName: 'Deploy Resource Group'
+      inputs:
+        azureSubscription: $(AzureSubscription)
+        scriptType: bash
+        scriptLocation: inlineScript
+        addSpnToEnvironment: true
+        inlineScript: |
+          #!/bin/bash
+          az group create -l southindia -n aks1 
