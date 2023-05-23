@@ -34,6 +34,6 @@ stages:
           #!/bin/bash
 
           
-          az group create -l $Location1 -n $ResourceGroupName1
-          az aks create -g $ResourceGroupName1 -n $K8sClusterName1 --enable-managed-identity --node-count 1 --generate-ssh-keys
+          az group create -l southindia -n aks-rg
+          az aks create -g aks-rg -n aks-cluster --enable-managed-identity --node-count 1 --generate-ssh-keys
           
