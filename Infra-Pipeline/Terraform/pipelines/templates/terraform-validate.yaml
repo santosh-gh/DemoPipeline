@@ -23,7 +23,7 @@ jobs:
       displayName: 'init'
       inputs:
         provider: 'azurerm'
-        command: 'init'
+        command: 'init -reconfigure'
         backendServiceArm: '${{ parameters.backendServiceArm }}'
         backendAzureRmResourceGroupName: '${{ parameters.backendAzureRmResourceGroupName }}'
         backendAzureRmStorageAccountName: '${{ parameters.backendAzureRmStorageAccountName }}'
