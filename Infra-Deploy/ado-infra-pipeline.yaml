@@ -6,7 +6,12 @@ pool:
 
 variables:
  - group: arm-variables
-
+ - name: Location1
+   values: "$(Location)"
+ - name: ResourceGroupName1 
+   values: "$(ResourceGroupName)"
+ - name: K8sClusterName1
+   values: "$(K8sClusterName)"
 
 resources:
 - repo: self
@@ -28,9 +33,6 @@ stages:
         inlineScript: |
           #!/bin/bash
 
-          $Location1 = "$(Location)"
-          $ResourceGroupName1 = "$(ResourceGroupName)"
-          $K8sClusterName1 = "$(K8sClusterName)"
           
           az group create -l $Location1 -n $ResourceGroupName1
           az aks create -g $ResourceGroupName1 -n $K8sClusterName1 --enable-managed-identity --node-count 1 --generate-ssh-keys
