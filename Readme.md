@@ -27,6 +27,7 @@ https://learn.microsoft.com/en-us/azure/aks/cluster-container-registry-integrati
 GitHub: Pipeline Examples
 https://github.com/thomast1906/thomasthorntoncloud-examples/tree/master/Azure-AKS-Deploy-Azure-DevOps
 
+https://github.com/thomast1906/thomasthorntoncloud-examples/tree/master/Azure-DevOps-Pipelines-Using-Templates
 
 We can modify the content of the ado-ci-pipeline.yml file to include following steps.
 Restore dotnet packages
@@ -77,3 +78,32 @@ az aks create -g aks-rg -n myAKSCluster --enable-managed-identity --node-count 1
 az aks get-credentials --resource-group aks-rg --name myAKSCluster
 
 az ad sp create-for-rbac --name myServicePrincipalName --role owner --scopes /subscriptions/b798c28b-e334-4ecf-b338-ec314ced3616/resourceGroups/aks-rg
+
+
+# Bash Script
+
+jobs:
+  - job: bash_echo
+    steps:
+      - task: Bash@3
+        displayName: 'Echo Test'
+        inputs:
+          targetType: inline
+          script: |
+            Echo "${{ parameters.bash_input }}"
+# Azure CLI
+
+jobs:
+  - job: azcli_resourcegroup_create
+    steps:
+          - task: AzureCLI@2
+            displayName: 'Deploy Resource Group'
+            inputs:
+              azureSubscription: 'tamopstf'
+              scriptType: bash
+              scriptLocation: inlineScript
+              addSpnToEnvironment: true
+              inlineScript: |
+                #!/bin/bash
+                az group create -l uksouth -n ${{ parameters.resource_group }}
+
