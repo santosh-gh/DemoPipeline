@@ -16,7 +16,7 @@ stages:
     - deployment: Deploy_Dev_AKS
       pool:
         vmImage: 'ubuntu-latest'
-      #environment: aks-113366-dev.aks-helloworld
+      environment: aks-aks-helloworld
       strategy:
         runOnce:
           deploy:
