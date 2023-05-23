@@ -19,11 +19,11 @@ jobs:
     - script: |
               ls $(System.DefaultWorkingDirectory)
 
-    - task: TerraformTaskV1@0
+    - task: TerraformTaskV3@3
       displayName: 'init'
       inputs:
         provider: 'azurerm'
-        command: 'init -reconfigure'
+        command: 'init'
         backendServiceArm: '${{ parameters.backendServiceArm }}'
         backendAzureRmResourceGroupName: '${{ parameters.backendAzureRmResourceGroupName }}'
         backendAzureRmStorageAccountName: '${{ parameters.backendAzureRmStorageAccountName }}'
