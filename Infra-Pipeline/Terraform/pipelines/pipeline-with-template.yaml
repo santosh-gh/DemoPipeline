@@ -1,6 +1,7 @@
 name: $(BuildDefinitionName)_$(date:yyyyMMdd)$(rev:.r)
 
-trigger: none
+trigger: 
+  - master
 
 pr: none
 
@@ -62,11 +63,11 @@ stages :
           environment: ${{ variables.environment }}
           terraform_version: ${{ variables.terraform_version }}
 
-  # - stage: bootstrap
-  #   dependsOn: [terraform_apply]
-  #   condition: ne('${{ parameters.Action }}', 'Destroy')
-  #   jobs:
-  #     - template: templates/az-cli.yaml
+  - stage: bootstrap
+    dependsOn: [terraform_apply]
+    condition: ne('${{ parameters.Action }}', 'Destroy')
+    jobs:
+      - template: templates/az-cli.yaml
 
   - stage: terraform_destroy
     condition: contains('${{ parameters.Action }}', 'Destroy')
