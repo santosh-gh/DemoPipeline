@@ -20,11 +20,8 @@ variables:
  - name: ApiName
    value: "WebApi"
 
-# resources: 
-#   repositories:
-#   - repository: DeployTemplates
-#     type: git
-#     name: DemoPipeline/helm-deploy
+resources:
+- repo: self
 
 stages:
 - stage: CI_Build_Stage
@@ -154,11 +151,15 @@ stages:
 
     - script: |
               ls $(System.DefaultWorkingDirectory)
-              
+
+    - bash: echo Contents in System Default Working Directory; ls -R $(System.DefaultWorkingDirectory)        
+    - bash: echo Before copying Contents in Build Artifact Directory; ls -R $(Build.ArtifactStagingDirectory) 
+
     - task: HelmDeploy@0
       displayName: 'Helm upgrade release'
       inputs:
-        #connectionType: 'Azure Resource Manager'
+        # connectionType: 'Kubernetes Service Connection'
+        # kubernetesServiceConnection: 'Private AKS Connection Dev'
         azureSubscriptionEndpoint: $(AzureResourceManagerConnection)
         azureSubscription: $(AzureSubscription)
         azureResourceGroup: '$(K8sResourceGroup)'
