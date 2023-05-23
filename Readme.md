@@ -24,10 +24,14 @@ https://www.educative.io/answers/simple-and-fast-ci-cd-as-a-code-for-kubernetes-
 # Authenticate with Azure Container Registry from Azure Kubernetes Service
 https://learn.microsoft.com/en-us/azure/aks/cluster-container-registry-integration?tabs=azure-cli
 
-GitHub: Pipeline Examples
+# GitHub: Pipeline Examples
 https://github.com/thomast1906/thomasthorntoncloud-examples/tree/master/Azure-AKS-Deploy-Azure-DevOps
 
 https://github.com/thomast1906/thomasthorntoncloud-examples/tree/master/Azure-DevOps-Pipelines-Using-Templates
+
+# Working with Azure DevOps Pipelines using Command line
+https://mohitgoyal.co/2019/07/16/working-with-azure-devops-pipelines-using-command-line/
+
 
 We can modify the content of the ado-ci-pipeline.yml file to include following steps.
 Restore dotnet packages

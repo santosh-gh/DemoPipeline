@@ -1,0 +1,54 @@
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - deploy/kubernetes-templates
+
+stages:
+
+  ##############
+  # DEPLOYMENT #
+  ##############  
+  - stage: Deploy_Dev
+    jobs:
+    - deployment: Deploy_Dev_AKS
+      pool:
+        vmImage: 'ubuntu-latest'
+      #environment: aks-113366-dev.aks-helloworld
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+
+            - checkout: self
+
+            - task: KubernetesManifest@0
+              displayName: 'AKS HelloWorld Deployment'
+              inputs:
+                action: 'deploy'
+                #namespace: 'aks-helloworld'
+                manifests: '$(System.DefaultWorkingDirectory)/App-CD-Pipeline/aks-manifest/kubernetes-templates/kubernetes-templates/deployment.yaml'
+
+            - task: KubernetesManifest@0
+              displayName: 'AKS HelloWorld Service'
+              inputs:
+                action: 'deploy'
+                #namespace: 'aks-helloworld'
+                manifests: '$(System.DefaultWorkingDirectory)/App-CD-Pipeline/aks-manifest/kubernetes-templates/kubernetes-templates/service.yaml'
+
+
+            # - task: KubernetesManifest@0
+            #   displayName: 'Install AKS HelloWorld Deployment 2'
+            #   inputs:
+            #     action: 'deploy'
+            #     #namespace: 'aks-helloworld'
+            #     manifests: '$(Build.SourcesDirectory)/deploy/kubernetes-templates/aks-hw-2.yaml'
+
+            # - task: KubernetesManifest@0
+            #   displayName: 'Install AKS HelloWorld Ingress'
+            #   inputs:
+            #     action: 'deploy'
+            #     namespace: 'aks-helloworld'
+            #     manifests: '$(Build.SourcesDirectory)/deploy/kubernetes-templates/hw-ingress.yaml'
