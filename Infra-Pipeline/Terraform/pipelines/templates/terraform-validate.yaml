@@ -1,34 +1,33 @@
-# parameters:
-#   - name: terraformVersion
-  # - backendServiceArm  
-  # - backendAzureRmResourceGroupName  
-  # - backendAzureRmStorageAccountName  
-  # - backendAzureRmContainerName  
-  # - backendAzureRmKey  
-  # - workingDirectory  
+parameters:
+  - backendServiceArm  
+  - backendAzureRmResourceGroupName  
+  - backendAzureRmStorageAccountName  
+  - backendAzureRmContainerName  
+  - backendAzureRmKey  
+  - workingDirectory  
   
-  jobs:
-    - job: terraform_validate
-      continueOnError: false
-      steps:
-      - task: TerraformInstaller@0
-        displayName: 'install'
-        inputs:
-          terraformVersion: latest
+jobs:
+  - job: terraform_validate
+    continueOnError: false
+    steps:
+    - task: TerraformInstaller@0
+      displayName: 'install'
+      inputs:
+        terraformVersion: latest
 
-      - task: TerraformTaskV1@0
-        displayName: 'init'
-        inputs:
-          provider: 'azurerm'
-          command: 'init'
-          backendServiceArm: '${{ parameters.backendServiceArm }}'
-          backendAzureRmResourceGroupName: '${{ parameters.backendAzureRmResourceGroupName }}'
-          backendAzureRmStorageAccountName: '${{ parameters.backendAzureRmStorageAccountName }}'
-          backendAzureRmContainerName: '${{ parameters.backendAzureRmContainerName }}'
-          backendAzureRmKey: '${{ parameters.backendAzureRmKey }}' 
-          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/'
-      - task: TerraformTaskV1@0
-        displayName: 'validate'
-        inputs:
-          provider: 'azurerm'
-          command: 'validate'
+    - task: TerraformTaskV1@0
+      displayName: 'init'
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        backendServiceArm: '${{ parameters.backendServiceArm }}'
+        backendAzureRmResourceGroupName: '${{ parameters.backendAzureRmResourceGroupName }}'
+        backendAzureRmStorageAccountName: '${{ parameters.backendAzureRmStorageAccountName }}'
+        backendAzureRmContainerName: '${{ parameters.backendAzureRmContainerName }}'
+        backendAzureRmKey: '${{ parameters.backendAzureRmKey }}' 
+        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/'
+    - task: TerraformTaskV1@0
+      displayName: 'validate'
+      inputs:
+        provider: 'azurerm'
+        command: 'validate'
