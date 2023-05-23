@@ -23,11 +23,12 @@ stages:
             steps:
 
             - checkout: self
-
+           
             - task: KubernetesManifest@0
               displayName: 'AKS HelloWorld Deployment'
               inputs:
                 action: 'deploy'
+                kubernetesServiceConnection: 'aks-cluster-service-connection'
                 #namespace: 'aks-helloworld'
                 manifests: '$(System.DefaultWorkingDirectory)/App-CD-Pipeline/aks-manifest/kubernetes-templates/kubernetes-templates/deployment.yaml'
 
@@ -35,6 +36,7 @@ stages:
               displayName: 'AKS HelloWorld Service'
               inputs:
                 action: 'deploy'
+                kubernetesServiceConnection: 'aks-cluster-service-connection'
                 #namespace: 'aks-helloworld'
                 manifests: '$(System.DefaultWorkingDirectory)/App-CD-Pipeline/aks-manifest/kubernetes-templates/kubernetes-templates/service.yaml'
 
