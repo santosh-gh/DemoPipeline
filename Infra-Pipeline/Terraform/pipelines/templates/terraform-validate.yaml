@@ -4,8 +4,9 @@ parameters:
   - name: backendAzureRmStorageAccountName  
   - name: backendAzureRmContainerName  
   - name: backendAzureRmKey  
-  - name: workingDirectory  
-  
+  - name: environment
+  - name: terraform_version 
+
 jobs:
   - job: terraform_validate
     continueOnError: false
