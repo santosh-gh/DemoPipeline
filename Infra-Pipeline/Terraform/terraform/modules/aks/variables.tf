@@ -4,7 +4,7 @@ variable "name" {
 }
 
 variable "location" {
-  default = "uksouth"
+  default = "southindia"
 }
 
 variable "ssh_public_key" {
@@ -12,6 +12,7 @@ variable "ssh_public_key" {
 }
 
 variable "kubernetes_version" {
+  default = "1.23.30"
 }
 
 variable "agent_count" {
