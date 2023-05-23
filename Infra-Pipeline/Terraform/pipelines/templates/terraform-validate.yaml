@@ -16,6 +16,9 @@ jobs:
       inputs:
         terraformVersion: latest #'${{ parameters.terraform_version }}'
 
+    - script: |
+              ls $(System.DefaultWorkingDirectory)
+
     - task: TerraformTaskV1@0
       displayName: 'init'
       inputs:
