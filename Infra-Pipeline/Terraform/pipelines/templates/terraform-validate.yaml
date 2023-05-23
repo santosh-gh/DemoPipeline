@@ -26,7 +26,7 @@ jobs:
         backendAzureRmStorageAccountName: '${{ parameters.backendAzureRmStorageAccountName }}'
         backendAzureRmContainerName: '${{ parameters.backendAzureRmContainerName }}'
         backendAzureRmKey: '${{ parameters.backendAzureRmKey }}' 
-        workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/terraform'
     - task: TerraformTaskV1@0
       displayName: 'validate'
       inputs:
