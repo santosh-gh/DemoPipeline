@@ -23,7 +23,9 @@ stages:
             steps:
 
             - checkout: self
-           
+            - script: |
+                      ls $(System.DefaultWorkingDirectory)
+
             - task: KubernetesManifest@0
               displayName: 'AKS HelloWorld Deployment'
               inputs:
