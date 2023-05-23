@@ -1,0 +1,42 @@
+trigger: none
+  # - master
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+ - group: arm-variables
+
+resources:
+- repo: self
+
+stages:
+- stage: CI_Infra_Deploy
+  displayName: Infra Deploy
+  jobs:
+  - job: Deploy_AKS
+    displayName: AKS Job
+    steps:
+    - task: AzureCLI@2
+      displayName: 'Deploy AKS'
+      inputs:
+        azureSubscription: $(AzureResourceManagerConnection)
+        scriptType: bash
+        scriptLocation: inlineScript
+        addSpnToEnvironment: true
+        inlineScript: |
+          #!/bin/bash     
+
+          AKS_RG = "aks-rg"  
+          AKS_CLUSTER = "aks-cluster"   
+          AKS_LOCATION = "southindia"
+
+          az group create -l $AKS_LOCATION -n $AKS_RG
+          az aks create -g $AKS_RG -n $AKS_CLUSTER --enable-managed-identity --node-count 1 --generate-ssh-keys
+
+    # - bash: |
+    #     kubectl apply -f ./namespaces 
+    #   displayName: 'Update namespaces'
+    # - bash: |
+    #     kubectl apply -f ./ServiceAccounts 
+    #   displayName: 'Update service accounts'  
