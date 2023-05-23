@@ -14,7 +14,7 @@ jobs:
     - task: TerraformInstaller@0
       displayName: 'install'
       inputs:
-        terraformVersion: latest #'${{ parameters.terraform_version }}'
+        terraformVersion: ${{ parameters.terraform_version }}'
 
     - script: |
               ls $(System.DefaultWorkingDirectory)
@@ -30,6 +30,7 @@ jobs:
         backendAzureRmContainerName: '${{ parameters.backendAzureRmContainerName }}'
         backendAzureRmKey: '${{ parameters.backendAzureRmKey }}' 
         workingDirectory: '$(System.DefaultWorkingDirectory)/Infra-Pipeline/Terraform/terraform'
+    
     - task: TerraformTaskV1@0
       displayName: 'validate'
       inputs:

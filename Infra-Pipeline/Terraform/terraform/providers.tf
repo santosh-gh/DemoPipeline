@@ -1,6 +1,6 @@
+# Configure the Microsoft Azure Provider
 provider "azurerm" {
-    version = "~> 2.0"
-    features {}
+  features {}
 }
 
 terraform {
@@ -10,3 +10,13 @@ terraform {
       # container_name = "aksdeployazuredevops"
     }
 }
+
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "=3.0.0"
+    }
+  }
+}
+
