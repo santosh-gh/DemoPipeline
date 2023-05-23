@@ -32,7 +32,7 @@ stages:
                 action: 'deploy'
                 kubernetesServiceConnection: 'aks-cluster-service-connection'
                 #namespace: 'aks-helloworld'
-                manifests: '$(System.DefaultWorkingDirectory)/App-CD-Pipeline/aks-manifest/kubernetes-templates/kubernetes-templates/deployment.yaml'
+                manifests: '$(System.DefaultWorkingDirectory)/App-CD-Pipeline/aks-manifest/kubernetes-templates/deployment.yaml'
 
             - task: KubernetesManifest@0
               displayName: 'AKS HelloWorld Service'
@@ -40,7 +40,7 @@ stages:
                 action: 'deploy'
                 kubernetesServiceConnection: 'aks-cluster-service-connection'
                 #namespace: 'aks-helloworld'
-                manifests: '$(System.DefaultWorkingDirectory)/App-CD-Pipeline/aks-manifest/kubernetes-templates/kubernetes-templates/service.yaml'
+                manifests: '$(System.DefaultWorkingDirectory)/App-CD-Pipeline/aks-manifest/kubernetes-templates/service.yaml'
 
 
             # - task: KubernetesManifest@0
