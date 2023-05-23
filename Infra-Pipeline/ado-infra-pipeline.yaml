@@ -27,12 +27,12 @@ stages:
         inlineScript: |
           #!/bin/bash     
 
-          $AKS_RG = "aks-rg"  
-          $AKS_CLUSTER = "aks-cluster"   
-          $AKS_LOCATION = "southindia"
+          # $AKS_RG = "aks-rg"  
+          # $AKS_CLUSTER = "aks-cluster"   
+          # $AKS_LOCATION = "southindia"
 
-          az group create -l $AKS_LOCATION -n $AKS_RG
-          az aks create -g $AKS_RG -n $AKS_CLUSTER --enable-managed-identity --node-count 1 --generate-ssh-keys
+          az group create -l southindia -n aks-rg
+          az aks create -g aks-rg -n aks-cluster --enable-managed-identity --node-count 1 --generate-ssh-keys
 
     # - bash: |
     #     kubectl apply -f ./namespaces 
