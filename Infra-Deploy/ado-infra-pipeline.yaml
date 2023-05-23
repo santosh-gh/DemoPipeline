@@ -5,13 +5,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
- - group: domo-api-variables
- - name: BuildConfiguration
-   value: "Release"
- - name: ChartPath
-   value: "helm-deploy"
- - name: ApiName
-   value: "WebApi"
+ - group: arm-variables
 
 resources:
 - repo: self
@@ -32,5 +26,5 @@ stages:
         addSpnToEnvironment: true
         inlineScript: |
           #!/bin/bash
-          az group create -l southindia -n $(ResourceGroupName) 
-          az aks create -g $(ResourceGroupName) -rg -n $(K8sClusterName) --enable-managed-identity --node-count 1 --generate-ssh-keys
+          az group create -l $(Location) -n $(ResourceGroupName) 
+          az aks create -g $(ResourceGroupName) -n $(K8sClusterName) --enable-managed-identity --node-count 1 --generate-ssh-keys
