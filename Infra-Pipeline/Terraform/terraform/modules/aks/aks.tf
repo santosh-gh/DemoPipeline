@@ -45,12 +45,12 @@ resource "azurerm_kubernetes_cluster" "k8s" {
   #     enabled = var.addons.azure_policy
   #   }
 
-ingress_application_gateway {
-      enabled   = var.addons.ingress_application_gateway
-      subnet_id = var.agic_subnet_id
-    }
+# ingress_application_gateway {
+#       enabled   = var.addons.ingress_application_gateway
+#       subnet_id = var.agic_subnet_id
+#     }
 
-  }
+#   }
 
   network_profile {
     load_balancer_sku = "standard"
