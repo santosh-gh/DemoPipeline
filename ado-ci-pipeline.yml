@@ -1,13 +1,13 @@
-trigger: none
-#   branches:
-#     include:
-#     - master
+trigger:
+  branches:
+    include:
+    - master
 
-# pr:
-#   branches:
-#     include:
-#     - master
-#     - feature*
+pr:
+  branches:
+    include:
+    - master
+    - feature*
 pool:
   vmImage: ubuntu-latest
 

@@ -1,5 +1,5 @@
-trigger:
-  - master
+trigger: none
+  # - master
 
 pool:
   vmImage: ubuntu-latest
@@ -20,11 +20,11 @@ stages:
 - stage: CI_Infra_Deploy
   displayName: Infra Deploy
   jobs:
-  - job: azcli
-    displayName: azcli Job
+  - job: Deploy_AKS
+    displayName: AKS Job
     steps:
     - task: AzureCLI@2
-      displayName: 'Deploy Resource Group'
+      displayName: 'Deploy AKS'
       inputs:
         azureSubscription: $(AzureResourceManagerConnection)
         scriptType: bash
