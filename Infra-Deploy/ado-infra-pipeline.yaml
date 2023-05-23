@@ -26,7 +26,7 @@ stages:
     - task: AzureCLI@2
       displayName: 'Deploy Resource Group'
       inputs:
-        azureSubscription: $(arm-svc-connection)
+        azureSubscription: $(AzureResourceManagerConnection)
         scriptType: bash
         scriptLocation: inlineScript
         addSpnToEnvironment: true
