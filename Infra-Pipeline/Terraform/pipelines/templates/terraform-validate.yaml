@@ -31,7 +31,7 @@ jobs:
         backendAzureRmKey: '${{ parameters.backendAzureRmKey }}' 
         workingDirectory: '$(System.DefaultWorkingDirectory)/Infra-Pipeline/Terraform/terraform'
     
-    - task: TerraformTaskV1@0
+    - task: TerraformTaskV3@3
       displayName: 'validate'
       inputs:
         provider: 'azurerm'

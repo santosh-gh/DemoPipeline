@@ -4,8 +4,9 @@
         - task: TerraformInstaller@0
           displayName: 'install'
           inputs:
-            terraformVersion: '${{ parameters.terraform_version }}'
-        - task: TerraformTaskV1@0
+            terraformVersion: latest #'${{ parameters.terraform_version }}'
+
+        - task: TerraformTaskV3@3
           displayName: 'init'
           inputs:
             provider: 'azurerm'
@@ -15,8 +16,9 @@
             backendAzureRmStorageAccountName: '${{ parameters.backendAzureRmStorageAccountName }}'
             backendAzureRmContainerName: '${{ parameters.backendAzureRmContainerName }}'
             backendAzureRmKey: '${{ parameters.backendAzureRmKey }}' 
-            workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/'
-        - task: TerraformTaskV1@0
+            workingDirectory: '$(System.DefaultWorkingDirectory)/Infra-Pipeline/Terraform/terraform'
+
+        - task: TerraformTaskV3@3
           displayName: 'destroy'
           condition: and(succeeded(), eq(variables['action'], 'Destroy'))
           inputs:
@@ -24,4 +26,4 @@
             command: 'destroy'
             commandOptions: '-input=false -auto-approve -var-file="../${{ parameters.environment }}/${{ parameters.environment }}.tfvars"'
             environmentServiceNameAzureRM: '${{ parameters.backendServiceArm }}'
-            workingDirectory: '$(System.DefaultWorkingDirectory)/Terraform/'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/Infra-Pipeline/Terraform/terraform'
