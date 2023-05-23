@@ -1,13 +1,13 @@
-trigger:
-  branches:
-    include:
-    - master
+trigger: none
+#   branches:
+#     include:
+#     - master
 
-pr:
-  branches:
-    include:
-    - master
-    - feature*
+# pr:
+#   branches:
+#     include:
+#     - master
+#     - feature*
 pool:
   vmImage: ubuntu-latest
 
@@ -15,6 +15,13 @@ variables:
  - group: domo-api-variables
  - name: BuildConfiguration
    value: "Release"
+ - name: ChartPath
+   value: "helm-deploy"
+ - name: ApiName
+   value: "WebApi"
+
+resources:
+- repo: self
 
 stages:
 - stage: CI_Build_Stage
@@ -29,6 +36,7 @@ stages:
       inputs:
         packageType: 'sdk'
         version: '6.x'
+
     - task: SonarCloudPrepare@1
       inputs:
         SonarCloud: 'sonar-cloud-svc-connection'
@@ -36,6 +44,7 @@ stages:
         scannerMode: 'MSBuild'
         projectKey: 'SANTOSHMOHAPATRA25_WebApp'
         projectName: 'WebApp'
+        
     - task: DotNetCoreCLI@2
       displayName: 'DotNet Restore Before Build'
       inputs:
@@ -48,15 +57,24 @@ stages:
         command: 'build'
         arguments: '--no-restore'
         projects: '**/DemoAPI/*.csproj'
+
     - task: SonarCloudPublish@1
       displayName: 'Publish Quality Gate Result on SonarCloud'
       enabled: true
       inputs:
         pollingTimeoutSec: '300'
+
     - task: SonarCloudAnalyze@1
       displayName: 'Run Code Analysis on SonarCloud'
       enabled: true
-  - job: TestJob
+
+    - task: WhiteSource@21
+      enabled: true
+      inputs:
+        cwd: '$(System.DefaultWorkingDirectory)'
+        projectName: 'WebApp'
+    
+  - job: TestJob 
     displayName: Test Job
     dependsOn: BuildJob
     #condition: succeeded('build_job')
@@ -90,28 +108,66 @@ stages:
       inputs:
         packageType: 'sdk'
         version: '6.x'    
+
     - task: Docker@2
-      displayName: Login to ACR
+      displayName: Login to Docker-Hub
       inputs:
         command: login
         containerRegistry: $(Docker-Hub-Service-Connection)
-        
+
     - task: Docker@2
-      displayName: Build and Push
+      displayName: Docker Build 
       inputs:
-        command: buildAndPush
+        command: build
         containerRegistry: $(Docker-Hub-Service-Connection)
-        repository: $(Docker-Hub-Repository-Name) # username/contosoRepository for DockerHub
+        repository: $(Docker-Hub-Repository-Name) # username/Repository for DockerHub
         Dockerfile: '**/DemoAPI/Dockerfile'
         buildContext: $(Build.Repository.LocalPath)
         tags: $(Build.BuildId)
 
-    # - task: Docker@2
-    #   displayName: Build & Push DemoAPI Image to ACR
-    #   inputs:
-    #     containerRegistry: AcrServiceConnectionDemoAPI
-    #     repository: 'Demo-api'
-    #     command: buildAndPush
-    #     Dockerfile: '**/DemoAPI/Dockerfile'
-    #     buildContext: $(Build.Repository.LocalPath)
-    #     tags: $(Build.BuildId)
+    - task: Docker@2
+      displayName: Docker Push
+      inputs:
+        command: push
+        containerRegistry: $(Docker-Hub-Service-Connection)
+        repository: $(Docker-Hub-Repository-Name) # username/Repository for DockerHub
+        tags: $(Build.BuildId)
+
+- stage: CD_Deploy_Stage
+  displayName: CD Deploy stage
+  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+  jobs:
+  - job: HelmDeploy
+    displayName: Helm Deploy
+    steps: 
+    - task: HelmInstaller@0
+      displayName: 'Install Helm $(HelmVersion)'
+      inputs:
+        helmVersion: $(HelmVersion)
+        checkLatestHelmVersion: false
+        installKubectl: true     
+
+    - checkout: self
+
+    - script: |
+              ls $(System.DefaultWorkingDirectory)
+
+    - bash: echo Contents in System Default Working Directory; ls -R $(System.DefaultWorkingDirectory)        
+    - bash: echo Before copying Contents in Build Artifact Directory; ls -R $(Build.ArtifactStagingDirectory) 
+
+    - task: HelmDeploy@0
+      displayName: 'Helm upgrade release'
+      inputs:
+        # connectionType: 'Kubernetes Service Connection'
+        # kubernetesServiceConnection: 'Private AKS Connection Dev'
+        azureSubscriptionEndpoint: $(AzureResourceManagerConnection)
+        azureSubscription: $(AzureSubscription)
+        azureResourceGroup: '$(K8sResourceGroup)'
+        kubernetesCluster: '$(K8sCluster)'
+        useClusterAdmin: true
+        namespace: '$(K8sNamespace)'
+        command: 'upgrade'
+        chartType: 'FilePath'
+        chartPath: '$(System.DefaultWorkingDirectory)/$(chartPath)'
+        releaseName: '$(K8sNamespace)'
+        arguments: '--create-namespace'
