@@ -1,5 +1,5 @@
-parameters:
-  - name: terraformVersion
+# parameters:
+#   - name: terraformVersion
   # - backendServiceArm  
   # - backendAzureRmResourceGroupName  
   # - backendAzureRmStorageAccountName  
