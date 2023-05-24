@@ -1,0 +1,173 @@
+trigger:
+  branches:
+    include:
+    - master
+
+pr:
+  branches:
+    include:
+    - master
+    - feature*
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+ - group: domo-api-variables
+ - name: BuildConfiguration
+   value: "Release"
+ - name: ChartPath
+   value: "helm-deploy"
+ - name: ApiName
+   value: "DemoAPI"
+
+resources:
+- repo: self
+
+stages:
+- stage: CI_Build
+  displayName: CI Build
+  jobs:
+  - job: Build
+    displayName: Build DemoAPI
+
+    steps:
+    - task: UseDotNet@2
+      displayName: Use .Net 6.x
+      inputs:
+        packageType: 'sdk'
+        version: '6.x'   
+        
+    - task: DotNetCoreCLI@2
+      displayName: 'DotNet Restore Before Build'
+      inputs:
+        command: 'restore'
+        projects: '**/DemoAPI/*.csproj'   
+
+    - task: DotNetCoreCLI@2
+      displayName: "Build with $(buildConfiguration) configuration"
+      inputs:
+        command: 'build'
+        arguments: '--no-restore'
+        projects: '**/DemoAPI/*.csproj'
+    
+    - task: SonarCloudPrepare@1
+      inputs:
+        SonarCloud: 'sonar-cloud-svc-connection'
+        organization: 'santoshmohapatra25'
+        scannerMode: 'MSBuild'
+        projectKey: 'SANTOSHMOHAPATRA25_WebApp'
+        projectName: 'WebApp'
+
+    - task: SonarCloudPublish@1
+      displayName: 'Publish Quality Gate Result on SonarCloud'
+      enabled: true
+      inputs:
+        pollingTimeoutSec: '300'
+
+    - task: SonarCloudAnalyze@1
+      displayName: 'Run Code Analysis on SonarCloud'
+      enabled: true
+
+    - task: WhiteSource@21
+      enabled: true
+      inputs:
+        cwd: '$(System.DefaultWorkingDirectory)'
+        projectName: 'WebApp'
+    
+  - job: Test
+    displayName: Unit Test
+    dependsOn: Build
+    #condition: succeeded('build_job')
+    steps:
+    - task: UseDotNet@2
+      displayName: Use .Net 6.x
+      inputs:
+        packageType: 'sdk'
+        version: '6.x'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'DotNet Restore Before Unit Test'
+      inputs:
+        command: 'restore'
+        projects: '**/DemoAPI.Test/*.csproj'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'Unit Test'
+      inputs:
+        command: 'test'
+        arguments: '--no-restore'
+        projects: '**/DemoAPI.Test/*.csproj'
+        publishTestResults: true
+
+  - job: BuildAndPushDockerImage
+    displayName: Build & Push Docker Image Job
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest')) 
+    steps:
+    - task: UseDotNet@2
+      displayName: Use .Net 6.x
+      inputs:
+        packageType: 'sdk'
+        version: '6.x'    
+
+    - task: Docker@2
+      displayName: Login to Docker-Hub
+      inputs:
+        command: login
+        containerRegistry: $(Docker-Hub-Service-Connection)
+
+    - task: Docker@2
+      displayName: Docker Build 
+      inputs:
+        command: build
+        containerRegistry: $(Docker-Hub-Service-Connection)
+        repository: $(Docker-Hub-Repository-Name) # username/Repository for DockerHub
+        Dockerfile: '**/DemoAPI/Dockerfile'
+        buildContext: $(Build.Repository.LocalPath)
+        tags: $(Build.BuildId)
+
+    - task: Docker@2
+      displayName: Docker Push
+      inputs:
+        command: push
+        containerRegistry: $(Docker-Hub-Service-Connection)
+        repository: $(Docker-Hub-Repository-Name) # username/Repository for DockerHub
+        tags: $(Build.BuildId)
+
+# - stage: CD_Deploy_Stage
+#   displayName: CD Deploy stage
+#   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+#   jobs:
+#   - job: HelmDeploy
+#     displayName: Helm Deploy
+#     steps: 
+#     - task: HelmInstaller@0
+#       displayName: 'Install Helm $(HelmVersion)'
+#       inputs:
+#         helmVersion: $(HelmVersion)
+#         checkLatestHelmVersion: false
+#         installKubectl: true     
+
+#     - checkout: self
+
+#     - script: |
+#               ls $(System.DefaultWorkingDirectory)
+
+#     - bash: echo Contents in System Default Working Directory; ls -R $(System.DefaultWorkingDirectory)        
+#     - bash: echo Before copying Contents in Build Artifact Directory; ls -R $(Build.ArtifactStagingDirectory) 
+
+#     - task: HelmDeploy@0
+#       displayName: 'Helm upgrade release'
+#       inputs:
+#         # connectionType: 'Kubernetes Service Connection'
+#         # kubernetesServiceConnection: 'Private AKS Connection Dev'
+#         azureSubscriptionEndpoint: $(AzureResourceManagerConnection)
+#         azureSubscription: $(AzureSubscription)
+#         azureResourceGroup: '$(K8sResourceGroup)'
+#         kubernetesCluster: '$(K8sCluster)'
+#         useClusterAdmin: true
+#         namespace: '$(K8sNamespace)'
+#         command: 'upgrade'
+#         chartType: 'FilePath'
+#         chartPath: '$(System.DefaultWorkingDirectory)/$(chartPath)'
+#         releaseName: '$(K8sNamespace)'
+#         arguments: '--create-namespace'
