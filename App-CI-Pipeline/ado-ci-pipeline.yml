@@ -8,6 +8,7 @@ pr:
     include:
     - master
     - feature*
+    
 pool:
   vmImage: ubuntu-latest
 
