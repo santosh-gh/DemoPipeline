@@ -28,16 +28,18 @@ jobs:
         VAULT_ID=$(az keyvault create --name "$(key_vault_name)" --resource-group "$(resource_group_name)" --location "$(az_region)" --query "id" -o tsv)
         az storage account create --resource-group $(resource_group_name) --name "$(sa_prefix)" --sku Standard_LRS --encryption-services blob
         az storage container create --name $(sa_container_name) --account-name "$(sa_prefix)" --auth-mode login
+
   - task: TerraformInstaller@0
     displayName: Terraform Installation
     inputs:
       terraformVersion: 'latest'
+
   - task: TerraformTaskV3@3
     displayName: Terraform Init
     inputs:
       provider: 'azurerm'
       command: 'init'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/Infra-Pipeline/Terraform2/tf-files'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/Infra-Pipeline/Terraform2/config-tf'
       backendServiceArm: 'arm-svc-connection'
       backendAzureRmResourceGroupName: '$(resource_group_name)'
       backendAzureRmStorageAccountName: '$(sa_prefix)'
@@ -49,7 +51,7 @@ jobs:
     inputs:
       provider: 'azurerm'
       command: 'plan'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/Infra-Pipeline/Terraform2/tf-files'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/Infra-Pipeline/Terraform2/config-tf'
       commandOptions: '-out=tfplan'
       environmentServiceNameAzureRM: 'arm-svc-connection'
 
@@ -58,6 +60,7 @@ jobs:
     inputs:
       provider: 'azurerm'
       command: 'apply'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/Infra-Pipeline/Terraform2/tf-files'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/Infra-Pipeline/Terraform2/config-tf'
       commandOptions: 'tfplan'
       environmentServiceNameAzureRM: 'arm-svc-connection'
+
