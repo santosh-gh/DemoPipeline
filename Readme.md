@@ -99,3 +99,15 @@ jobs:
                 #!/bin/bash
                 az group create -l uksouth -n ${{ parameters.resource_group }}
 
+
+
+
+- script: |
+    dotnet restore
+    dotnet build ./src/DeviceManager.Api/ --configuration $(buildConfiguration)
+    dotnet test ./test/DeviceManager.Api.UnitTests/ --configuration $(buildConfiguration) --filter Category!=Integration --logger "trx;LogFileName=testresults.trx"
+    dotnet test ./test/DeviceManager.Api.UnitTests/ --configuration $(buildConfiguration) --filter Category!=Integration /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(System.DefaultWorkingDirectory)/TestResults/Coverage/
+    cd ./test/DeviceManager.Api.UnitTests/
+    dotnet reportgenerator "-reports:$(System.DefaultWorkingDirectory)/TestResults/Coverage/coverage.cobertura.xml" "-targetdir:$(System.DefaultWorkingDirectory)/TestResults/Coverage/Reports" "-reportTypes:htmlInline" "-tag:$(Build.BuildNumber)"
+    cd ../../
+    dotnet publish ./src/DeviceManager.Api/ --configuration $(buildConfiguration) --output $BUILD_ARTIFACTSTAGINGDIRECTORY
