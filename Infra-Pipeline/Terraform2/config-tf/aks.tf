@@ -1,5 +1,5 @@
 data "azuread_group" "admin-team" {
-  display_name     = "<your-admin-group>"
+  display_name     = "admin"
 }
 
 module "aks" {

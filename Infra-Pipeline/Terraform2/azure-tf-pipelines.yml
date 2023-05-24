@@ -9,18 +9,18 @@ jobs:
   pool:
     vmImage: ubuntu-latest
   variables:
-    az_region: <region>
-    resource_group_name: <resource-group-name>
-    subscription: <service-connection-auth>
-    key_vault_name: <key-vault-name>
-    sa_prefix: <service-account-name>
-    sa_container_name: <blob-container-name>
+    az_region:  "southindia"
+    resource_group_name: "aks-rg"
+    subscription: "b798c28b-e334-4ecf-b338-ec314ced3616"
+    key_vault_name: "akskeyvault524"
+    sa_prefix: "aksstg52420331"
+    sa_container_name: "stgcontainer"
     tfstateFile: terraform.tfstate
 
   steps:
   - task: AzureCLI@2
     inputs:
-      azureSubscription: '<service-connection-auth>' #replace with your service connection - azure resource manager service principal
+      azureSubscription: 'arm-svc-connection' #replace with your service connection - azure resource manager service principal
       scriptType: 'bash'
       scriptLocation: 'inlineScript'
       inlineScript: |
@@ -37,8 +37,8 @@ jobs:
     inputs:
       provider: 'azurerm'
       command: 'init'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/tf-files'
-      backendServiceArm: '<service-connection-auth>'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/Infra-Pipeline/Terraform2/tf-files'
+      backendServiceArm: 'arm-svc-connection'
       backendAzureRmResourceGroupName: '$(resource_group_name)'
       backendAzureRmStorageAccountName: '$(sa_prefix)'
       backendAzureRmContainerName: '$(sa_container_name)'
@@ -49,15 +49,15 @@ jobs:
     inputs:
       provider: 'azurerm'
       command: 'plan'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/tf-files'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/Infra-Pipeline/Terraform2/tf-files'
       commandOptions: '-out=tfplan'
-      environmentServiceNameAzureRM: 'akrish-poc-sp'
+      environmentServiceNameAzureRM: 'arm-svc-connection'
 
   - task: TerraformTaskV3@3
     displayName: Terraform Apply
     inputs:
       provider: 'azurerm'
       command: 'apply'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/tf-files'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/Infra-Pipeline/Terraform2/tf-files'
       commandOptions: 'tfplan'
-      environmentServiceNameAzureRM: '<service-connection-auth>'
+      environmentServiceNameAzureRM: 'arm-svc-connection'
