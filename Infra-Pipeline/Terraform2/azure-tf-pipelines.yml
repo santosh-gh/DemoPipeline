@@ -1,5 +1,4 @@
-trigger:
-- master
+trigger: none
 
 #variables:
 #  global_variable: value    # this is available to all jobs
@@ -63,4 +62,3 @@ jobs:
       workingDirectory: '$(System.DefaultWorkingDirectory)/Infra-Pipeline/Terraform2/config-tf'
       commandOptions: 'tfplan'
       environmentServiceNameAzureRM: 'arm-svc-connection'
-

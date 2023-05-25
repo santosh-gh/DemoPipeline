@@ -6,7 +6,7 @@ variable log_analytics_workspace_sku {
 }
 
 variable "location" {
-  default = "uksouth"
+  default = "southindia"
 }
 
 variable "environment" {

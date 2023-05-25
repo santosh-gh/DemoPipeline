@@ -2,7 +2,7 @@ variable "name" {
 }
 
 variable "location" {
-  default = "uksouth"
+  default = "southindia"
 }
 
 variable "network_address_space" {
